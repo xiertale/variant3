@@ -1,0 +1,31 @@
+﻿CREATE TABLE Roles (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(50) NOT NULL UNIQUE,
+    AccessRights NVARCHAR(MAX)
+);
+
+CREATE TABLE Users (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Login NVARCHAR(50) NOT NULL UNIQUE,
+    Password NVARCHAR(100) NOT NULL,
+    RegistrationDate DATE NOT NULL DEFAULT CAST(GETDATE() AS DATE),
+    Surname NVARCHAR(50) NOT NULL,
+    Name NVARCHAR(50) NOT NULL,
+    Phone NVARCHAR(20),
+    RoleId INT NOT NULL,
+    
+    FOREIGN KEY (RoleId) REFERENCES Roles(Id)
+);
+
+CREATE TABLE Inventory (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    InventoryNumber NVARCHAR(50) NOT NULL UNIQUE,
+    Name NVARCHAR(100) NOT NULL,
+    Type NVARCHAR(50) NOT NULL,
+    Description NVARCHAR(MAX),
+    PublicationDate DATE NOT NULL,
+    State NVARCHAR(20) NOT NULL CHECK (State IN (N'в наличии', N'выдана', N'на обслуживании')),
+    UserId INT NULL,
+    
+    FOREIGN KEY (UserId) REFERENCES Users(Id)
+);
